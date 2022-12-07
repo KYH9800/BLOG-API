@@ -1,0 +1,2 @@
+DROP DATABASE blog_database;
+SHOW DATABASES;
