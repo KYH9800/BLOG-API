@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3065;
+const port = 3000;
 // 유용한 라이브러리
 const cors = require('cors');
 // router

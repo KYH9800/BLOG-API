@@ -47,7 +47,7 @@ router.get('/', async (req, res, next) => {
     const allPosts = await Post.findAll({
       attributes: ['postId', 'userId', 'nickname', 'title', 'createdAt', 'updatedAt', 'likes'],
     });
-    // console.log('전체 조회: ', result);
+    console.log('전체 조회: ', allPosts);
     return res.json({ data: allPosts });
   } catch (error) {
     console.error('error: ', error);
@@ -167,6 +167,13 @@ router.put('/:postId/like', authMiddleware, async (req, res, next) => {
 
     const post = await Post.findOne({
       where: { postId: postId },
+      include: [
+        {
+          model: User,
+          as: 'Likers',
+          attributes: ['userId'],
+        },
+      ],
     });
     console.log('post: ', post);
 
@@ -178,7 +185,7 @@ router.put('/:postId/like', authMiddleware, async (req, res, next) => {
     console.log('post.postId: ', post.postId);
 
     await post.addLikers(userId);
-    return res.json({ postId: post.postId, userId: userId });
+    return res.json({ postId: post.postId, userId: userId, data: post });
   } catch (error) {
     console.error(error);
     next(error);
@@ -187,7 +194,7 @@ router.put('/:postId/like', authMiddleware, async (req, res, next) => {
 
 // GET /posts/like, 좋아요 게시글 조회
 router.get('/like', authMiddleware, async (req, res, next) => {
-  res.send('좋아요 게시글 조회');
+  return res.send('좋아요 게시글 조회');
 });
 
 module.exports = router;
